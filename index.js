@@ -71,3 +71,12 @@ bot.on('voiceStateUpdate', (old, fresh) =>
 
 
 bot.login(config.token)
+
+// shutdown cleanup
+let shutdown = function ()
+{
+    bot.destroy().then(() => log(c.blue('logged out')))
+}
+
+process.on('SIGTERM', () => shutdown())
+process.on('SIGINT', () => shutdown())
