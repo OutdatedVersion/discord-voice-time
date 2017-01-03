@@ -1,0 +1,17 @@
+{
+  "name": "discord-voice-time",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "discord.js": "^11.0.0",
+    "ms": "^0.7.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "OutdatedVersion",
+  "license": "MIT"
+}
