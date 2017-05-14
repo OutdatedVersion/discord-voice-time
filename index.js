@@ -1,16 +1,14 @@
 // framework
-const Discord = require('discord.js')
-
-// time conversion
-const ms = require('ms')
+const Discord = require('discord.js'),
+    ms = require('ms')
 
 // pretty
 const c = require('chalk'),
-      log = console.log
+    log = console.log
 
 
 // configuration
-let config = require('./config.json');
+let config = require('./config.json')
 
 // what qualifies as using this command
 let trigger = `${config.prefix}voice`
@@ -34,49 +32,49 @@ bot.on('message', message =>
 
     if (args.length)
     {
-        const attempt = message.guild.member(message.mentions.users.first());
+        const attempt = message.guild.member(message.mentions.users.first())
 
         if (attempt.voiceChannel != null)
         {
-            message.channel.send( {
+            message.channel.send({
                 embed: {
                     title: `${attempt.displayName} | ${attempt.voiceChannel.name}`,
                     description: ms(Date.now() - trackedClients.get(attempt.id), { long: true })
                 }
-            } )
+            })
         }
         else
         {
             message.reply(`${attempt.displayName} is not connected to a voice channel.`)
         }
     }
-});
+})
 
 // listen for when the person connects & store that
 bot.on('voiceStateUpdate', (old, fresh) =>
 {
     // check that the client is actually connecting..
-    if (old.voiceChannel == null && fresh.voiceChannel != null)
+    if (old.voiceChannel === null && fresh.voiceChannel !== null)
     {
         trackedClients.set(fresh.id, Date.now())
         log(c.gray(`${old.displayName} connected to ${fresh.voiceChannel.name}`))
     }
     // disconnecting..
-    else if (old.voiceChannel != null && fresh.voiceChannel == null)
+    else if (old.voiceChannel !== null && fresh.voiceChannel === null)
     {
         trackedClients.delete(fresh.id)
         log(c.gray(`${old.displayName} disconnected from ${old.voiceChannel.name}`))
     }
-});
+})
 
 
 bot.login(config.token)
 
-// shutdown cleanup
-let shutdown = function ()
+// ending cleanup
+let shutdown = () =>
 {
     bot.destroy().then(() => log(c.blue('logged out')))
 }
 
-process.on('SIGTERM', () => shutdown())
-process.on('SIGINT', () => shutdown())
+process.on('SIGTERM', shutdown)
+process.on('SIGINT', shutdown)
